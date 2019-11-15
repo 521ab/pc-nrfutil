@@ -120,6 +120,7 @@ class DFUAdapter:
         packet = Slip.encode(data)
         logger.log(TRANSPORT_LOGGING_LEVEL, 'SLIP: --> ' + str(data))
         try:
+            print(packet)
             self.serial_port.write(packet)
         except SerialException as e:
             raise NordicSemiException('Writing to serial port failed: ' + str(e) + '. '
@@ -142,7 +143,7 @@ class DFUAdapter:
                 return None
 
         logger.log(TRANSPORT_LOGGING_LEVEL, 'SLIP: <-- ' + str(decoded_data))
-
+	print(decoded_data)
         return decoded_data
 
 class DfuTransportSerial(DfuTransport):
@@ -294,6 +295,10 @@ class DfuTransportSerial(DfuTransport):
 
         response = self.__select_data()
         try_to_recover()
+
+        # 펌웨어 전송 부분 
+        # 현재 16 * 4 * 64 바이트 만큼 펌웨어를 보내고 멈췄다가 다시 보냄
+
         for i in range(response['offset'], len(firmware), response['max_size']):
             data = firmware[i:i+response['max_size']]
             try:
