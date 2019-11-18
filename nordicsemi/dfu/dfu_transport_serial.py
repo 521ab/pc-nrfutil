@@ -122,6 +122,7 @@ class DFUAdapter:
         try:
             print(packet)
             self.serial_port.write(packet)
+            time.sleep(0.5)         # M2M comunication delay
         except SerialException as e:
             raise NordicSemiException('Writing to serial port failed: ' + str(e) + '. '
                                       'If MSD is enabled on the target device, try to disable it ref. '
@@ -143,7 +144,7 @@ class DFUAdapter:
                 return None
 
         logger.log(TRANSPORT_LOGGING_LEVEL, 'SLIP: <-- ' + str(decoded_data))
-	print(decoded_data)
+	    print(decoded_data)
         return decoded_data
 
 class DfuTransportSerial(DfuTransport):
